@@ -4,11 +4,7 @@ package minju.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minju.board.model.Article;
-import minju.board.model.Board;
-import minju.board.model.Comment;
-import minju.board.repository.ArticleRepository;
-import minju.board.repository.BoardRepository;
-import minju.board.repository.CommentRepository;
+import minju.board.service.ArticleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,57 +12,58 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
-@RequestMapping("boards/{boardId}")
 @Slf4j
+@RequiredArgsConstructor
+@Controller
+@RequestMapping("/article")
 public class ArticleController {
-    private final ArticleRepository articleRepository;
-    private final BoardRepository boardRepository;
-    private final CommentRepository commentRepository;
+
+    private final ArticleService articleService;
+
+    // 전체 게시글 다 보여주기
+    @GetMapping
+    public String all(Model model) {
+        List<Article> articles = articleService.getAllArticle();
+        model.addAttribute("articles", articles);
+        return "article/article";
+    }
+
+    @GetMapping("/{articleId}")
+    public String article(@PathVariable Long articleId, Model model) {
+        Article article = articleService.getArticle(articleId);
+        model.addAttribute("article", article);
+        return "article/detail";
+    }
 
     @GetMapping("/add")
-    public String addForm(@PathVariable("boardId") long boardId, Model model){
+    public String addArticle(Model model) {
         model.addAttribute("article", new Article());
-        log.info("{}", boardId);
-        model.addAttribute("boardId", boardId);
         return "article/addForm";
     }
 
     @PostMapping("/add")
-    public String addArticle(@PathVariable("boardId") long boardId, @ModelAttribute Article article){
-        article.setCreated_at(LocalDate.now());
-        article.setUpdated_at(LocalDate.now());
-        article.setBoard_id(boardId);
-        Article saveArticle = articleRepository.save(article);
-        log.info("article={}", article);
-        return "redirect:/boards/{boardId}";
+    public String createArticle(@ModelAttribute Article article) {
+        Article createdArticle = articleService.addArticle(article);
+        return "redirect:/article/" + createdArticle.getId();
     }
 
-    @GetMapping("/articles/{articleId}")
-    public String article(@PathVariable long articleId, @PathVariable long boardId,  Model model){
-        Article article = articleRepository.findById(articleId);
-        model.addAttribute("article", article);
-        Board board = boardRepository.findById(boardId);
-        model.addAttribute("boardId", board.getId());
-        List<Comment> comments = commentRepository.findByArticleId(articleId);
-        model.addAttribute("comments", comments);
-        return "article/article";
-    }
-
-    // 수정
-    @GetMapping("/articles/{articleId}/edit")
-    public String editForm(@PathVariable long articleId, Model model){
-        Article article = articleRepository.findById(articleId);
+    @GetMapping("/{articleId}/edit")
+    public String editArticle(@PathVariable Long articleId, Model model) {
+        Article article = articleService.getArticle(articleId);
         model.addAttribute("article", article);
         return "article/editForm";
     }
 
-    @PostMapping("/articles/{articleId}/edit")
-    public String edit2(@PathVariable Long articleId, @ModelAttribute Article article) {
-        articleRepository.update(articleId, article);
-        return "redirect:";
+    @PostMapping("/{articleId}/edit")
+    public String updateArticle(@PathVariable Long articleId, @ModelAttribute Article article) {
+        Article findArticle = articleService.getArticle(articleId);
+        Long id = articleService.updateArticle(findArticle, article);
+        return "redirect:/article/" + id;
     }
 
-
+    @GetMapping("/{articleID}/delete")
+    public String deleteArticle(@PathVariable Long articleID) {
+        articleService.deletArticle(articleID);
+        return "redirect:/article";
+    }
 }

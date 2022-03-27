@@ -1,9 +1,11 @@
 package minju.board.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,8 +15,12 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Article {
-    private long id;
+@Entity
+public class Article extends BaseEntityTime {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private String sub_title;
     private String content;
@@ -30,8 +36,13 @@ public class Article {
 
     // 좋아요 개수(생략)
     // 싫어요 개수(생략)
-    private LocalDate created_at;
-    private LocalDate  updated_at;
+
     // board와 article은 1:n 관계
-    private long board_id;
+    // 게시글과 카테고리는 N:1
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "article")
+    List<Comment> comments = new ArrayList<>();
 }
