@@ -17,7 +17,7 @@
         <table class="table">
             <tbody>
             <tr th:each="category : ${categories}">
-                <td><a href="item.html" th:href="@{/article(type=category.type)}" th:text="${category.boardName}">게시판명</a></td>
+                <td><a href="item.html" th:href="@{/article(type=${category.type})}" th:text="${category.boardName}">게시판명</a></td>
             </tr>
             </tbody>
         </table>

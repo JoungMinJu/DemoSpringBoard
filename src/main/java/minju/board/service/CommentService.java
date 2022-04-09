@@ -3,9 +3,11 @@ package minju.board.service;
 import lombok.RequiredArgsConstructor;
 import minju.board.domain.entity.Comment;
 import minju.board.domain.repository.CommentRepository;
+import minju.board.dto.CommentDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,28 +17,46 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     // 댓글 CRUD
-    public Comment getComment(Long id){
+    public CommentDto getComment(Long id){
         Optional<Comment> optional = commentRepository.findById(id);
-        return optional.get();
+        Comment comment = optional.get();
+        CommentDto commentDto = CommentDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .createdDate(comment.getCreatedDate())
+                .modifiedDate(comment.getModifiedDate())
+                .build();
+        return commentDto;
     }
 
-    public List<Comment> getAllComment(){
-        return commentRepository.findAll();}
+    public List<CommentDto> getAllComment(){
+        List<Comment> all = commentRepository.findAll();
+        List<CommentDto> dtoList = new ArrayList<>();
+        for (Comment comment : all) {
+            CommentDto commentDto = CommentDto.builder()
+                    .id(comment.getId())
+                    .content(comment.getContent())
+                    .createdDate(comment.getCreatedDate())
+                    .modifiedDate(comment.getModifiedDate())
+                    .build();
+            dtoList.add(commentDto);
+        }
+        return dtoList;}
 
     @Transactional
-    public Comment addComment(Comment comment){
-        return commentRepository.save(comment);
+    public Comment addComment(CommentDto commentDto){
+
+        return commentRepository.save(commentDto.toComment());
     }
 
     @Transactional
-    public Long updateComment(Comment originComment, Comment comment){
+    public Long updateComment(CommentDto originComment, CommentDto comment){
         originComment.setContent(comment.getContent());
         return originComment.getId();
     }
 
     @Transactional
     public void deleteComment(Long id){
-        Comment comment = getComment(id);
-        commentRepository.delete(comment);
+        commentRepository.deleteById(id);
     }
 }

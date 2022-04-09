@@ -2,8 +2,13 @@ package minju.board.dto;
 
 import lombok.*;
 import minju.board.domain.entity.Article;
+import minju.board.domain.entity.Category;
+import minju.board.domain.entity.Comment;
 
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +21,8 @@ public class ArticleDto {
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private Category category;
+    private List<Comment> comments;
 
     public Article toArticle(){
         Article article = Article.builder()
@@ -24,6 +31,7 @@ public class ArticleDto {
                 .sub_title(sub_title)
                 .content(content)
                 .build();
+        article.setCategory(category);
         return article;
     }
     @Builder

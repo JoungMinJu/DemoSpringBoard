@@ -4,6 +4,7 @@ package minju.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minju.board.domain.entity.Article;
+import minju.board.domain.entity.Category;
 import minju.board.dto.ArticleDto;
 import minju.board.service.ArticleService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,23 +26,36 @@ public class ArticleController {
 
     // 전체 게시글 다 보여주기
     @GetMapping
-    public String all(Model model) {
-        List<ArticleDto> articleList = articleService.getArticleList();
+    public String all(Model model, @RequestParam String type) {
+        List<ArticleDto> articleList;
+        try{ articleList= articleService.getArticleList()
+                .stream()
+                .filter(articleDto -> articleDto.getCategory().getType().equals(type))
+                .collect(Collectors.toList());}
+        catch(Exception e){
+//            log.info("리스트는 {}", articleService.getArticleList()
+//                    .stream()
+//                    .map(ArticleDto::getCategory)
+//                    .map(Category::getType));
+            articleList = new ArrayList<>();
+        }
         model.addAttribute("articles", articleList);
+        model.addAttribute("type", type);
          return "board/list.html";
     }
 
 
     @GetMapping("/{articleId}")
-    public String article(@PathVariable Long articleId, Model model) {
+    public String article(@PathVariable Long articleId, Model model, @RequestParam String type) {
         ArticleDto article = articleService.getArticle(articleId);
         model.addAttribute("article", article);
+        model.addAttribute("type",type);
         return "article/detail";
     }
 
     @GetMapping("/add")
-    public String addArticle(Model model) {
-        model.addAttribute("article", new Article());
+    public String addArticle(Model model, @RequestParam String type) {
+        model.addAttribute("article", new ArticleDto());
         return "article/addForm";
     }
 
@@ -51,9 +67,9 @@ public class ArticleController {
 //    }
 
     @PostMapping("/add")
-    public String createArticleV2(@ModelAttribute ArticleDto articleDto){
-        articleService.addArticle(articleDto);
-        return "redirect:/";
+    public String createArticle(@ModelAttribute ArticleDto articleDto, @RequestParam String type){
+        articleService.addArticle(articleDto, type);
+        return "redirect:/article?type="+type;
     }
 
     @GetMapping("/{articleId}/edit")
@@ -73,8 +89,8 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleID}/delete")
-    public String deleteArticle(@PathVariable Long articleID) {
+    public String deleteArticle(@PathVariable Long articleID, @RequestParam String type) {
         articleService.deleteArticle(articleID);
-        return "redirect:/article";
+        return "redirect:/article?type="+type;
     }
 }

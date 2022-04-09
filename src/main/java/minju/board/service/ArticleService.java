@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minju.board.domain.entity.Article;
 import minju.board.domain.repository.ArticleRepository;
+import minju.board.domain.repository.CategoryRepository;
 import minju.board.dto.ArticleDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final CategoryRepository categoryRepository;
 
 //    public Article getArticle(Long id) {
 //        Optional<Article> optional = articleRepository.findById(id);
@@ -53,7 +55,10 @@ public class ArticleService {
                     .title(articleEntity.getTitle())
                     .sub_title(articleEntity.getSub_title())
                     .content(articleEntity.getContent())
+                    .createdDate(articleEntity.getCreatedDate())
+                    .modifiedDate(articleEntity.getModifiedDate())
                     .build();
+            articleDto.setCategory(articleEntity.getCategory());
             articleDtoList.add(articleDto);
         }
         // dto로 전달해버리기
@@ -67,7 +72,8 @@ public class ArticleService {
 //    }
     
     @Transactional
-    public Article addArticle(ArticleDto articleDto){
+    public Article addArticle(ArticleDto articleDto, String type){
+        articleDto.setCategory(categoryRepository.findByType(type));
         return articleRepository.save(articleDto.toArticle());
     }
 
