@@ -1,4 +1,4 @@
-package minju.board.model;
+package minju.board.domain.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

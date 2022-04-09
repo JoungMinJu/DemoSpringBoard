@@ -1,29 +1,32 @@
-package minju.board.model;
+package minju.board.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 public class Comment extends BaseEntityTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String content;
 
-    public Comment() {
+    @Builder
+    public Comment(String content) {
+        this.content = content;
     }
 
-    private LocalDate created_at;
-    private LocalDate updated_at;
+
+
+
 
     // article과 comment는 1:n 관계
     // N + 1

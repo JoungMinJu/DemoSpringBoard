@@ -20,14 +20,14 @@
 <!--    &lt;!&ndash; 추가 &ndash;&gt;-->
 <!--    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>-->
 
-<!--    <div>-->
-<!--        <label >생성시간</label>-->
-<!--        <input type="text" id="created_at" name="created_at" class="form-control" value="10000" th:value="${article.created_at}" readonly>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label >수정시간</label>-->
-<!--        <input type="text" id="updated_at" name="updated_at" class="form-control" value="10000" th:value="${article.updated_at}" readonly>-->
-<!--    </div>-->
+    <div>
+        <label >생성시간</label>
+        <input type="text" id="created_at" name="created_at" class="form-control" value="10000" th:value="${#temporals.format(article.createdDate,'dd-MM-yyyy HH:mm')}" readonly>
+    </div>
+    <div>
+        <label >수정시간</label>
+        <input type="text" id="updated_at" name="updated_at" class="form-control" value="10000" th:value="${#temporals.format(article.modifiedDate,'dd-MM-yyyy HH:mm')}" readonly>
+    </div>
     <div>
         <label >제목</label>
         <input type="text" id="title" name="title" class="form-control" value="1" th:value="${article.title}" readonly>
@@ -50,11 +50,17 @@
                     th:href="@{/article/{articleId}/edit(articleId=${article.id})}"
                     type="button">상품 수정</a>
         </div>
-<!--        <div class="col">-->
-<!--            <button class="w-100 btn btn-secondary btn-lg"-->
-<!--                    th:onclick="|location.href='@{/boards/{boardId}(boardId=${boardId})}'|"-->
-<!--                    type="button">목록으로</button>-->
-<!--        </div>-->
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    th:onclick="|location.href='@{/article/{articleId}/delete(articleId=${article.id})}'|"
+                    type="button">삭제</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    th:onclick="|location.href='@{/article'}|"
+                    type="button">목록으로</button>
+        </div>
+
     </div>
 </div> <!-- /container -->
 </body>

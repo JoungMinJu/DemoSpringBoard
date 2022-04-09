@@ -1,5 +1,6 @@
-package minju.board.model;
+package minju.board.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class Category extends BaseEntityTime {
     private String type;
     private String boardName;
 
+    @Builder
     public Category(String type, String boardName) {
         this.type = type;
         this.boardName = boardName;

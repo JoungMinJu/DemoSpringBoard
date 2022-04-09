@@ -1,6 +1,6 @@
-package minju.board.repository;
+package minju.board.domain.repository;
 
-import minju.board.model.Article;
+import minju.board.domain.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {

@@ -1,34 +1,32 @@
-package minju.board.model;
+package minju.board.domain.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @Entity
+@Table(name="article")
 public class Article extends BaseEntityTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length=100, nullable = false)
     private String title;
+    @Column(length=100, nullable = false)
     private String sub_title;
+    @Column(columnDefinition = "TEXT", nullable=false)
     private String content;
 
-    public Article() {
-    }
-
-    public Article(String title, String sub_title, String content) {
+    @Builder
+    public Article(Long id,String title, String sub_title, String content) {
+        this.id = id;
         this.title = title;
         this.sub_title = sub_title;
         this.content = content;
