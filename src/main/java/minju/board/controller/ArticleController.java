@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minju.board.domain.entity.Article;
 import minju.board.domain.entity.Category;
+import minju.board.domain.entity.Comment;
 import minju.board.dto.ArticleDto;
+import minju.board.dto.CommentDto;
 import minju.board.service.ArticleService;
+import minju.board.service.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final CommentService commentService;
 
     // 전체 게시글 다 보여주기
     @GetMapping
@@ -39,6 +43,7 @@ public class ArticleController {
 //                    .map(Category::getType));
             articleList = new ArrayList<>();
         }
+
         model.addAttribute("articles", articleList);
         model.addAttribute("type", type);
          return "board/list.html";
@@ -48,8 +53,18 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public String article(@PathVariable Long articleId, Model model, @RequestParam String type) {
         ArticleDto article = articleService.getArticle(articleId);
+        List<CommentDto> commentList;
+        try{
+            commentList =commentService.getAllComment()
+                    .stream()
+                    .filter(commentDto -> commentDto.getArticle().getId().equals(articleId))
+                    .collect(Collectors.toList());
+        }catch(Exception e){
+            commentList = new ArrayList<>();
+        }
         model.addAttribute("article", article);
         model.addAttribute("type",type);
+        model.addAttribute("comments",commentList);
         return "article/detail";
     }
 

@@ -1,7 +1,9 @@
 package minju.board.service;
 
 import lombok.RequiredArgsConstructor;
+import minju.board.domain.entity.Article;
 import minju.board.domain.entity.Comment;
+import minju.board.domain.repository.ArticleRepository;
 import minju.board.domain.repository.CommentRepository;
 import minju.board.dto.CommentDto;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final ArticleRepository articleRepository;
     // 댓글 CRUD
     public CommentDto getComment(Long id){
         Optional<Comment> optional = commentRepository.findById(id);
@@ -39,13 +42,16 @@ public class CommentService {
                     .createdDate(comment.getCreatedDate())
                     .modifiedDate(comment.getModifiedDate())
                     .build();
+            commentDto.setArticle(comment.getArticle());
             dtoList.add(commentDto);
         }
         return dtoList;}
 
     @Transactional
-    public Comment addComment(CommentDto commentDto){
-
+    public Comment addComment(CommentDto commentDto, Long articleId){
+        Optional<Article> byId = articleRepository.findById(articleId);
+        Article article = byId.get();
+        commentDto.setArticle(article);
         return commentRepository.save(commentDto.toComment());
     }
 

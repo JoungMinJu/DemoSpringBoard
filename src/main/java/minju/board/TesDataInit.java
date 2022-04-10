@@ -3,9 +3,12 @@ package minju.board;
 import lombok.RequiredArgsConstructor;
 import minju.board.domain.entity.Article;
 import minju.board.domain.entity.Category;
+import minju.board.domain.entity.Comment;
 import minju.board.domain.repository.ArticleRepository;
 import minju.board.domain.repository.CategoryRepository;
+import minju.board.domain.repository.CommentRepository;
 import minju.board.dto.ArticleDto;
+import minju.board.dto.CommentDto;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +18,7 @@ import javax.annotation.PostConstruct;
 public class TesDataInit {
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
     // 게시판 미리 추가
     @PostConstruct
@@ -36,5 +40,10 @@ public class TesDataInit {
                 .build().toArticle();
         article.setCategory(categoryRepository.findByType("free"));
         articleRepository.save(article);
+        Comment comment = Comment.builder()
+                .content("댓글입니다.")
+                .build();
+        comment.setArticle(article);
+        commentRepository.save(comment);
     }
 }
