@@ -95,12 +95,12 @@ public class ArticleController {
     }
 
     @PostMapping("/{articleId}/edit")
-    public String updateArticle(@PathVariable Long articleId, @ModelAttribute ArticleDto articleDto) {
+    public String updateArticle(@PathVariable Long articleId, @ModelAttribute ArticleDto articleDto, @RequestParam String type) {
         ArticleDto findArticle = articleService.getArticle(articleId);
         log.info(findArticle.getTitle());
         log.info(articleDto.getTitle());
         Long id = articleService.updateArticle(findArticle, articleDto);
-        return "redirect:/article/" + id;
+        return "redirect:/article/" + id+"?type="+type;
     }
 
     @GetMapping("/{articleID}/delete")

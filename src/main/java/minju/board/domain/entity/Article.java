@@ -31,7 +31,6 @@ public class Article extends BaseEntityTime {
         this.sub_title = sub_title;
         this.content = content;
     }
-
     // 좋아요 개수(생략)
     // 싫어요 개수(생략)
 
@@ -41,6 +40,7 @@ public class Article extends BaseEntityTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "article")
+
+    @OneToMany(mappedBy = "article" ,cascade = CascadeType.PERSIST,orphanRemoval = true,fetch = FetchType.EAGER)
     List<Comment> comments = new ArrayList<>();
 }

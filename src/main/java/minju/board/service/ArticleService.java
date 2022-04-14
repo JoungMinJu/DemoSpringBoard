@@ -22,10 +22,6 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
 
-//    public Article getArticle(Long id) {
-//        Optional<Article> optional = articleRepository.findById(id);
-//        return optional.get();
-//    }
     @Transactional
     public ArticleDto getArticle(Long id){
         Optional<Article> byId = articleRepository.findById(id);
@@ -38,12 +34,11 @@ public class ArticleService {
                 .createdDate(article.getCreatedDate())
                 .modifiedDate(article.getModifiedDate())
                 .build();
+        if(article.getCategory()!=null) articleDto.setCategory(article.getCategory());
+        if(article.getComments()!=null) articleDto.setComments(article.getComments());
         return articleDto;
     }
 
-//    public List<Article> getAllArticle() {
-//        return articleRepository.findAll();
-//    }
 
     @Transactional
     public List<ArticleDto> getArticleList(){
@@ -66,10 +61,6 @@ public class ArticleService {
         return articleDtoList;
     }
 
-//    @Transactional
-//    public Article addArticle(Article article) {
-//        return articleRepository.save(article);
-//    }
     
     @Transactional
     public Article addArticle(ArticleDto articleDto, String type){
@@ -77,13 +68,6 @@ public class ArticleService {
         return articleRepository.save(articleDto.toArticle());
     }
 
-//    @Transactional
-//    public Long updateArticle(Article originArticle, Article article) {
-//        originArticle.setTitle(article.getTitle());
-//        originArticle.setSub_title(article.getSub_title());
-//        originArticle.setContent(article.getContent()); // dirty-checking 변경된 부분 알아서 저장
-//        return originArticle.getId();
-//    }
 
     @Transactional
     public Long updateArticle(ArticleDto originArticle, ArticleDto articleDto){

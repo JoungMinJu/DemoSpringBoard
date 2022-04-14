@@ -32,6 +32,6 @@ public class Comment extends BaseEntityTime {
     // N + 1
     // article -> sql
     // comment * n -> sql
-    @ManyToOne(fetch = FetchType.LAZY) // EAGER(바로 갖고오려고, N + 1), LAZY(필요할 때) -> sql을 어떻게 갖고 올건지
+    @ManyToOne() // EAGER(바로 갖고오려고, N + 1), LAZY(필요할 때) -> sql을 어떻게 갖고 올건지
     private Article article;
 }
