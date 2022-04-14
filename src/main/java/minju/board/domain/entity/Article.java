@@ -41,6 +41,6 @@ public class Article extends BaseEntityTime {
     private Category category;
 
 
-    @OneToMany(mappedBy = "article" ,cascade = CascadeType.PERSIST,orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "article" ,cascade = CascadeType.REMOVE,orphanRemoval = true,fetch = FetchType.EAGER)
     List<Comment> comments = new ArrayList<>();
 }

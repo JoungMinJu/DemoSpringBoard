@@ -55,10 +55,12 @@ public class CommentService {
         return commentRepository.save(commentDto.toComment());
     }
 
+
     @Transactional
-    public Long updateComment(CommentDto originComment, CommentDto comment){
-        originComment.setContent(comment.getContent());
-        return originComment.getId();
+    public void updateComment(CommentDto originComment, CommentDto comment){
+        Comment origin = commentRepository.getById(originComment.getId());
+        origin.setContent(comment.getContent());
+
     }
 
     @Transactional

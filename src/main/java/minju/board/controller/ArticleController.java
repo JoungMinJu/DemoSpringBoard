@@ -37,16 +37,12 @@ public class ArticleController {
                 .filter(articleDto -> articleDto.getCategory().getType().equals(type))
                 .collect(Collectors.toList());}
         catch(Exception e){
-//            log.info("리스트는 {}", articleService.getArticleList()
-//                    .stream()
-//                    .map(ArticleDto::getCategory)
-//                    .map(Category::getType));
             articleList = new ArrayList<>();
         }
 
         model.addAttribute("articles", articleList);
         model.addAttribute("type", type);
-         return "board/list.html";
+         return "article/list.html";
     }
 
 
@@ -97,8 +93,6 @@ public class ArticleController {
     @PostMapping("/{articleId}/edit")
     public String updateArticle(@PathVariable Long articleId, @ModelAttribute ArticleDto articleDto, @RequestParam String type) {
         ArticleDto findArticle = articleService.getArticle(articleId);
-        log.info(findArticle.getTitle());
-        log.info(articleDto.getTitle());
         Long id = articleService.updateArticle(findArticle, articleDto);
         return "redirect:/article/" + id+"?type="+type;
     }
