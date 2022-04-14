@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="sidebarFragment">
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">🐳</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">전체 게시판</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/article?type=free}">자유 게시판</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/article?type=info}">정보 게시판</a>
+        </div>
+    </div>
+</th:block>
+
+</html>

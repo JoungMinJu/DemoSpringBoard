@@ -1,83 +1,68 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 560px;
-        }
-    </style>
-</head>
-<body>
 
-<div class="container">
-    <div class="py-5 text-center">
-        <h2 >글 상세</h2>
-    </div>
-
-<!--    &lt;!&ndash; 추가 &ndash;&gt;-->
-<!--    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>-->
-
-    <div>
-        <label >생성시간</label>
-        <input type="text" id="created_at" name="created_at" class="form-control" value="10000" th:value="${#temporals.format(article.createdDate,'dd-MM-yyyy HH:mm')}" readonly>
-    </div>
-    <div>
-        <label >수정시간</label>
-        <input type="text" id="updated_at" name="updated_at" class="form-control" value="10000" th:value="${#temporals.format(article.modifiedDate,'dd-MM-yyyy HH:mm')}" readonly>
-    </div>
-    <div>
-        <label >제목</label>
-        <input type="text" id="title" name="title" class="form-control" value="1" th:value="${article.title}" readonly>
-    </div>
-    <div>
-        <label>부제목</label>
-        <input type="text" id="sub_title" name="sub_title" class="form-control" value="상품A" th:value="${article.sub_title}" readonly>
-    </div>
-    <div>
-        <label >내용</label>
-        <input type="text" id="content" name="content" class="form-control" value="10000" th:value="${article.content}" readonly>
-    </div>
-
-
-    <hr class="my-4">
-
-    <div class="row">
-        <div class="col">
-            <a class="w-100 btn btn-primary btn-lg"
-                    th:href="@{/article/{articleId}/edit(articleId=${article.id}, type=${type})}"
-                    type="button">수정</a>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2 >글 상세</h2>
         </div>
-        <div class="col">
-            <button class="w-100 btn btn-secondary btn-lg"
-                    th:onclick="|location.href='@{/article/{articleId}/delete(articleId=${article.id}, type=${type})}'|"
-                    type="button">삭제</button>
+        <!--    &lt;!&ndash; 추가 &ndash;&gt;-->
+        <!--    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>-->
+        <div>
+            <label >생성시간</label>
+            <input type="text" id="created_at" name="created_at" class="form-control" value="10000" th:value="${#temporals.format(article.createdDate,'dd-MM-yyyy HH:mm')}" readonly>
         </div>
-        <div class="col">
-            <button class="w-100 btn btn-secondary btn-lg"
-                    th:onclick="|location.href='@{/article/(type=${type})}'|"
-                    type="button">목록으로</button>
+        <div>
+            <label >수정시간</label>
+            <input type="text" id="updated_at" name="updated_at" class="form-control" value="10000" th:value="${#temporals.format(article.modifiedDate,'dd-MM-yyyy HH:mm')}" readonly>
         </div>
-
-    </div>
-    <div class="row">
-        <form method="post">
-            <input type="text" name="content" placeholder="내용을 입력하세요">
-            <input type="submit">
-        </form>
-    </div>
-    <br>
-    <div>
+        <div>
+            <label >제목</label>
+            <input type="text" id="title" name="title" class="form-control" value="1" th:value="${article.title}" readonly>
+        </div>
+        <div>
+            <label>부제목</label>
+            <input type="text" id="sub_title" name="sub_title" class="form-control" value="상품A" th:value="${article.sub_title}" readonly>
+        </div>
+        <div>
+            <label >내용</label>
+            <input type="text" id="content" name="content" class="form-control" value="10000" th:value="${article.content}" readonly>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <a class="w-100 btn btn-primary btn-lg"
+                   th:href="@{/article/{articleId}/edit(articleId=${article.id}, type=${type})}"
+                   type="button">수정</a>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        th:onclick="|location.href='@{/article/{articleId}/delete(articleId=${article.id}, type=${type})}'|"
+                        type="button">삭제</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        th:onclick="|location.href='@{/article/(type=${type})}'|"
+                        type="button">목록으로</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <form method="post">
+                <input type="text" name="content" placeholder="내용을 입력하세요">
+                <input type="submit">
+            </form>
+        </div>
+        <br><br>
+        <div>
             <tbody>
-            <tr th:each="comment : ${comments}">
-                <td><input type="text" th:value="${comment.content}" readonly></td>
-<!--                <form th:action="@{'/article'+${articleId}+'/comment/delete/'+${comment.id}(type=${type})}" method="post">-->
-<!--                    <button class="delete">삭제</button>-->
-<!--                </form>-->
-                [[${type}]]
-                [[${articleId}]]
+            <div th:each="comment : ${comments}">
+                <input type="text" th:value="${comment.content}" readonly>
+                <!--                <form th:action="@{'/article'+${articleId}+'/comment/delete/'+${comment.id}(type=${type})}" method="post">-->
+                <!--                    <button class="delete">삭제</button>-->
+                <!--                </form>-->
                 <button
                         th:onclick="|location.href='@{/article/{articleId}/comment/edit/{commentId}(articleId=${article.id}, commentId=${comment.id}, type=${type})}'|"
                         type="button">수정</button>
@@ -85,13 +70,9 @@
                         th:onclick="|location.href='@{/article/{articleId}/comment/delete/{commentId}(articleId=${article.id}, commentId=${comment.id}, type=${type})}'|"
                         type="button">삭제</button>
 
-            </tr>
+            </div>
             </tbody>
+        </div>
     </div>
-
-
-
-
-</div>
-</body>
+</th:block>
 </html>
